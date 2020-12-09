@@ -11,7 +11,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
@@ -31,22 +33,28 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class ImageCalculations extends AppCompatActivity implements View.OnTouchListener {
 
     private ImageView fullImage;
     private GraphView rgbChart;
-    private int bitmapWidth, bitmapHeight, scaledHeight, scaledWidth;
+    private int bitmapWidth, bitmapHeight;
     private BottomNavigationView navView;
     private double artSize;
     public static List<Point> points;
     private Bitmap imageBitmap, croppedBitmap;
     private int x1, y1, x2, y2, croppedWidth, croppedHeight;
-
+    public String name;
+    public String currentPhotoPath;
+    public String date;
     private TextView tv_artifactSize;
+    public static final String NAME_EXTRA = "com.example.bme3890projectapp.EXTRA.NAME";
 
 
     @Override
@@ -61,31 +69,85 @@ public class ImageCalculations extends AppCompatActivity implements View.OnTouch
         navView = (BottomNavigationView) findViewById(R.id.bnv_navbar);
         navView.setOnNavigationItemSelectedListener(bottomNavMethod);
 
-        SharedPreferences imageInfo = getSharedPreferences("images",
+        Intent loginToApp = getIntent();
+        //get extra info from intent
+        name = loginToApp.getStringExtra(TakePhoto.USERNAME_EXTRA);
+        SharedPreferences imagePaths = getSharedPreferences("images",
                 Context.MODE_PRIVATE);
-        SharedPreferences.Editor loginEditor = imageInfo.edit();
+        SharedPreferences.Editor loginEditor = imagePaths.edit();
 
         Intent imageCalculations = getIntent();
-        String currentPhotoPath = imageCalculations.getStringExtra(TakePhoto.NAME_EXTRA);
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        loginEditor.putString(date, currentPhotoPath);
+        currentPhotoPath = imageCalculations.getStringExtra(TakePhoto.NAME_EXTRA);
+
+
+        loginEditor.putString(name, currentPhotoPath);
         loginEditor.apply();
 
         imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
         fullImage.setImageBitmap(imageBitmap);
         bitmapWidth = imageBitmap.getWidth();
         bitmapHeight = imageBitmap.getHeight();
-        scaledHeight = imageBitmap.getScaledHeight(294);
-        scaledWidth = imageBitmap.getScaledWidth(294);
-
-
-        artSize = (bitmapWidth/32.13)/1.335; //32.13 = ratio of pixels to mm, 10 -> converts to cm
-        tv_artifactSize.setText("Artifact diameter: " + artSize + "mm");
-
-
+        //scaledHeight = imageBitmap.getScaledHeight(294);
+        //scaledWidth = imageBitmap.getScaledWidth(294);
 
         points = new ArrayList<Point>();
         fullImage.setOnTouchListener(this);
+
+    }
+
+    public void saveImage(View view) {
+
+        date = new SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z", Locale.getDefault()).format(new Date());
+
+        SharedPreferences imagePath = getSharedPreferences("imagepath", Context.MODE_PRIVATE);
+        SharedPreferences.Editor imagepathEditor = imagePath.edit();
+
+        SharedPreferences sizes = getSharedPreferences("sizes", Context.MODE_PRIVATE);
+        SharedPreferences.Editor resultEditor = sizes.edit();
+
+        SharedPreferences dates = getSharedPreferences("dates", Context.MODE_PRIVATE);
+        SharedPreferences.Editor datesEditor = dates.edit();
+
+        if (imagePath.getStringSet(name, null ) == null) {
+            String [] pathArray = {currentPhotoPath};
+                    Set<String> mySet = new HashSet<String>(Arrays.asList(pathArray));
+            imagepathEditor.putStringSet(name, mySet).apply();
+
+            String [] sizeArray = {"" + artSize};
+                Set<String> s2 = new HashSet<String>(Arrays.asList(sizeArray));
+            resultEditor.putStringSet(name, s2);
+            resultEditor.apply();
+
+            String [] dateArray = {date};
+            Set<String> s3 = new HashSet<String>(Arrays.asList(dateArray));
+            datesEditor.putStringSet(name, s3);
+            datesEditor.apply();
+            Toast.makeText(getApplicationContext(),"Saved.", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, SecondActivity.class);
+            i.putExtra(NAME_EXTRA,name);
+            startActivity(i);
+
+
+        }
+        else {
+            Set<String> s = imagePath.getStringSet(name, null);
+            s.add(currentPhotoPath);
+            imagepathEditor.putStringSet(name,s).apply();
+
+            Set<String> set = sizes.getStringSet(name, null);
+            set.add("" + artSize);
+            resultEditor.putStringSet(name,set).apply();
+
+            Set<String> set2 = dates.getStringSet(name, null);
+            set2.add(date);
+            datesEditor.putStringSet(name,set2).apply();
+
+            Toast.makeText(getApplicationContext(),"Saved.", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(this, SecondActivity.class);
+            i.putExtra(NAME_EXTRA,name);
+            startActivity(i);
+
+        }
 
 
 
@@ -93,20 +155,25 @@ public class ImageCalculations extends AppCompatActivity implements View.OnTouch
 
     public boolean onTouch(View view, MotionEvent event) {
 
+        int xRatio = imageBitmap.getWidth() / fullImage.getWidth();
+        int yRatio = imageBitmap.getHeight() / fullImage.getHeight();
+
         if (points.size() < 2) {
             if (points.size() == 0) {
                 Point point = new Point();
-                point.x = (int) event.getX();
-                point.y = (int) event.getY();
+                point.x = (int) event.getX()*xRatio;
+                point.y = (int) event.getY()*yRatio;
                 points.add(point);
+                //Toast.makeText(getApplicationContext(), point.toString(), Toast.LENGTH_LONG).show();
                 //first.setText(point.toString());
             }
             else {
                 Point point = new Point();
                 point = new Point();
-                point.x = (int) event.getX();
-                point.y = (int) event.getY();
+                point.x = (int) (event.getX()*xRatio);
+                point.y = (int) (event.getY()*yRatio);
                 points.add(point);
+                //Toast.makeText(getApplicationContext(), point.toString(), Toast.LENGTH_LONG).show();
                 //second.setText(point.toString());
 
             }
@@ -122,7 +189,7 @@ public class ImageCalculations extends AppCompatActivity implements View.OnTouch
     public void cropImage(View view) {
 
         if (points.size() == 2) {
-            Toast.makeText(getApplicationContext(), "inside loop", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "inside loop", Toast.LENGTH_LONG).show();
             for (int i = 0; i < points.size(); i++) {
                 if (i == 0) {
                     Point one = points.get(i);
@@ -139,12 +206,18 @@ public class ImageCalculations extends AppCompatActivity implements View.OnTouch
             //Log.d("myTag", Integer.toString(x1) + ", " + Integer.toString(y1));
             //Log.d("myTag", Integer.toString(x2) + ", " + Integer.toString(y2));
             //Log.d("myTag", Integer.toString(x2 - x1) + ", " + Integer.toString(y2 - y1));
+
             croppedWidth = x2-x1;
             croppedHeight = y2-y1;
-
-            croppedBitmap = Bitmap.createBitmap(imageBitmap ,x1, y1, croppedWidth, croppedHeight);
-
+            croppedBitmap = Bitmap.createBitmap(imageBitmap ,x2, y2, croppedWidth, croppedHeight);
+            //Toast.makeText(getApplicationContext(), croppedWidth, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), bitmapWidth, Toast.LENGTH_LONG).show();
             fullImage.setImageBitmap(croppedBitmap);
+
+            points.clear();
+
+            artSize = (croppedWidth/32.13)/1.335; //32.13 = ratio of pixels to mm, 1.335 = ratio of relative size (on screen) to actual size
+            tv_artifactSize.setText("Artifact diameter: " + artSize + " mm");
 
         }
 
@@ -194,8 +267,11 @@ public class ImageCalculations extends AppCompatActivity implements View.OnTouch
     }
 
 
+
+
     public void toHome(MenuItem item) {
         Intent i = new Intent(this, SecondActivity.class);
+        i.putExtra(NAME_EXTRA,name);
         startActivity(i);
     }
 

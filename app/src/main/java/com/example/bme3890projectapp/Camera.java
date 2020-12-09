@@ -36,6 +36,8 @@ public class Camera extends AppCompatActivity implements SensorEventListener {
     public DataPoint[] fluxPoint = new DataPoint[1];
     public int k = 0;
     public float lux;
+    public String name;
+    public static final String NAME_EXTRA = "com.example.bme3890projectapp.EXTRA.NAME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,11 @@ public class Camera extends AppCompatActivity implements SensorEventListener {
         fluxChart.setTitle("Flux Values");
         fluxChart.getGridLabelRenderer().setVerticalAxisTitle("Flux (lx)");
         fluxChart.getGridLabelRenderer().setHorizontalAxisTitle("Time Point");
+
+        Intent loginToApp = getIntent();
+        //get extra info from intent
+        name = loginToApp.getStringExtra(SecondActivity.NAME_EXTRA);
+        //Toast.makeText(getApplicationContext(), "Hi " + name, Toast.LENGTH_LONG).show();
     }
 
     public void displayFlux(View view) {
@@ -73,6 +80,7 @@ public class Camera extends AppCompatActivity implements SensorEventListener {
                 public void run() {
 
                     Intent i=new Intent(Camera.this,TakePhoto.class);
+                    i.putExtra(NAME_EXTRA, name);
                     startActivity(i);
                 }
             }, 2000);

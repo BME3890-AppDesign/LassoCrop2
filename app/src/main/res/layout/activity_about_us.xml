@@ -38,7 +38,7 @@
         android:id="@+id/bnv_navbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        app:itemBackground="@color/colorBlueMain"
+        app:itemBackground="@color/colorBlueDark"
         app:itemIconTint="#ffffff"
         app:itemTextColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"

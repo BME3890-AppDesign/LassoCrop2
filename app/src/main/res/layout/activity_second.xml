@@ -12,13 +12,11 @@
         android:layout_width="344dp"
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
         android:fontFamily="sans-serif-light"
         android:textColor="#000000"
-        android:textSize="30sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,35 +42,18 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <Button
-        android:id="@+id/btn_myImages"
-        android:layout_width="150dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorBlueMedium"
-        android:fontFamily="sans-serif-light"
-        android:onClick="toMyImages"
-        android:text="MY IMAGES"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_newVisit" />
-
-    <Button
         android:id="@+id/btn_myResults"
-        android:layout_width="150dp"
-        android:layout_height="120dp"
+        android:layout_width="329dp"
+        android:layout_height="93dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:background="@color/colorBlueMedium"
         android:fontFamily="sans-serif-light"
         android:onClick="toMyResults"
         android:text="MY RESULTS"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_newVisit" />
 
     <Button
@@ -80,15 +61,14 @@
         android:layout_width="150dp"
         android:layout_height="120dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:background="@color/colorBlueLight"
+        android:background="@color/colorBlueMain"
         android:fontFamily="sans-serif-light"
         android:text="ABOUT BCC"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_myImages" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_myResults" />
 
     <Button
         android:id="@+id/btn_aboutUs"
@@ -96,8 +76,7 @@
         android:layout_height="120dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@color/colorBlueLight"
+        android:background="@color/colorBlueMain"
         android:fontFamily="sans-serif-light"
         android:onClick="toAboutUs"
         android:text="ABOUT US"

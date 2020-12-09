@@ -20,7 +20,9 @@ public class SecondActivity extends AppCompatActivity {
     private TextView tv_welcome;
     private String url;
     private String url2;
+    public String name, name2, name3, name4;
     private BottomNavigationView navView;
+    public static final String NAME_EXTRA = "com.example.bme3890projectapp.EXTRA.NAME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,14 @@ public class SecondActivity extends AppCompatActivity {
 
         Intent loginToApp = getIntent();
         //get extra info from intent
-        String name = loginToApp.getStringExtra(MainActivity.NAME_EXTRA);
+        name = loginToApp.getStringExtra(MainActivity.NAME_EXTRA);
+
+        Intent i = getIntent();
+        name2 = i.getStringExtra(ImageCalculations.NAME_EXTRA);
+
+        Intent i1 = getIntent();
+        name3 = i1.getStringExtra(MyResults.NAME_EXTRA);
+        name4 = i1.getStringExtra(ResultInfo.NAME_EXTRA);
 
         //put string in textView
         if (name == null) {
@@ -56,14 +65,17 @@ public class SecondActivity extends AppCompatActivity {
     }
 
 
+
     public void toHome(MenuItem item) {
         Intent i = new Intent(this, SecondActivity.class);
+        i.putExtra(NAME_EXTRA, name);
         startActivity(i);
     }
 
     public void toThird(MenuItem item) {
 
         Intent i = new Intent(this, Email.class);
+        i.putExtra(NAME_EXTRA, name);
         startActivity(i);
     }
 
@@ -78,13 +90,23 @@ public class SecondActivity extends AppCompatActivity {
 
     public void toMyImages(View view) {
         Intent i = new Intent(this, MyImages.class);
+        i.putExtra(NAME_EXTRA, name);
         startActivity(i);
 
     }
 
     public void toMyResults(View view) {
         Intent i = new Intent(this, MyResults.class);
-        startActivity(i);
+        if (name == null){
+            i.putExtra(NAME_EXTRA, name2);
+            startActivity(i);
+        }
+
+        else {
+            i.putExtra(NAME_EXTRA, name);
+            startActivity(i);
+        }
+
 
     }
 
@@ -123,7 +145,19 @@ public class SecondActivity extends AppCompatActivity {
 
     public void toCamera(View view) {
         Intent i = new Intent(this, Camera.class);
-        startActivity(i);
+        if (name == null){
+            i.putExtra(NAME_EXTRA, name3);
+            startActivity(i);
+        }
+
+        else if (name3 == null) {
+            i.putExtra(NAME_EXTRA, name4);
+            startActivity(i);
+
+        }
+        else
+            i.putExtra(NAME_EXTRA, name);
+            startActivity(i);
     }
 
 }

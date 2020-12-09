@@ -36,10 +36,12 @@ public class TakePhoto extends AppCompatActivity {
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA",
             "android.permission.WRITE_EXTERNAL_STORAGE"};
     public static final String NAME_EXTRA = "com.example.bme3890projectapp.EXTRA.NAME";
+    public static final String USERNAME_EXTRA = "com.example.bme3890projectapp.EXTRA.USERNAME";
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private PreviewView myPreview;
     private ImageCapture imageCapture;
+    public String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,9 @@ public class TakePhoto extends AppCompatActivity {
 
         myPreview = (PreviewView) findViewById(R.id.pv_viewFinder);
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        Intent loginToApp = getIntent();
+        //get extra info from intent
+        name = loginToApp.getStringExtra(com.example.bme3890projectapp.Camera.NAME_EXTRA);
 
         if(allPermissionsGranted()){
             startCamera(); //start camera if permission has been granted by user
@@ -142,7 +147,7 @@ public class TakePhoto extends AppCompatActivity {
                         Toast.makeText(TakePhoto.this, "Image Saved successfully", Toast.LENGTH_SHORT).show();
 
                         Intent imageCalculations = new Intent(TakePhoto.this, ImageCalculations.class);
-
+                        imageCalculations.putExtra(USERNAME_EXTRA, name);
                         imageCalculations.putExtra(NAME_EXTRA, currentPhotoPath);
                         startActivity(imageCalculations);
                     }

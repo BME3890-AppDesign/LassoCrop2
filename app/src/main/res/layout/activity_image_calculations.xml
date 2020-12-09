@@ -20,44 +20,43 @@
 
     <ImageView
         android:id="@+id/iv_fullImage"
-        android:layout_width="300dp"
-        android:layout_height="189dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        android:layout_width="153dp"
+        android:layout_height="204dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/gv_graph"
-        android:layout_width="308dp"
-        android:layout_height="159dp"
-        android:layout_marginBottom="80dp"
+        android:layout_width="209dp"
+        android:layout_height="119dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_cropImage" />
 
     <Button
         android:id="@+id/btn_makeGraph"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="208dp"
+        android:layout_width="145dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="85dp"
         android:background="@color/colorBlueMain"
         android:onClick="makeGraph"
         android:text="Graph RGB Values"
-        app:layout_constraintBottom_toTopOf="@+id/bnv_navbar"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/gv_graph"
+        app:layout_constraintTop_toTopOf="@+id/btn_cropImage" />
 
     <TextView
         android:id="@+id/tv_artifactSize"
-        android:layout_width="218dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="259dp"
+        android:layout_height="49dp"
+        android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,13 +64,42 @@
 
     <Button
         android:id="@+id/btn_cropImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Crop Image"
+        android:layout_width="146dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorBlueMedium"
         android:onClick="cropImage"
-        app:layout_constraintBottom_toTopOf="@+id/btn_makeGraph"
+        android:text="Crop Image"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_artifactSize" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="252dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorPinkMain"
+        android:onClick="saveImage"
+        android:text="Save to My Images"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gv_graph" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="153dp"
+        android:layout_height="93dp"
+        android:layout_marginTop="80dp"
+        android:text="Tap the top left and bottom right corners of your skin artifact and then press crop image."
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.404"
+        app:layout_constraintStart_toEndOf="@+id/iv_fullImage"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
