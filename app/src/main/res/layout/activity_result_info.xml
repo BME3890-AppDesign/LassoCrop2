@@ -79,13 +79,23 @@
         android:id="@+id/button3"
         android:layout_width="167dp"
         android:layout_height="43dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="92dp"
         android:background="@color/colorPinkMain"
         android:onClick="emailResults"
         android:text="Email Results"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_size" />
+
+    <TextView
+        android:id="@+id/tv_redValue"
+        android:layout_width="332dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_size" />
 

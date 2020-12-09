@@ -42,6 +42,7 @@ public class MyResults extends AppCompatActivity {
         //access shared preference file -> size, determine the length of the array
         SharedPreferences sizes = getSharedPreferences("sizes", Context.MODE_PRIVATE);
         SharedPreferences dates = getSharedPreferences("dates", Context.MODE_PRIVATE);
+        SharedPreferences redValues = getSharedPreferences("redValues", Context.MODE_PRIVATE);
 
         // get string set and size for sizes
 
@@ -50,6 +51,7 @@ public class MyResults extends AppCompatActivity {
         // get string set for dates and convert into list so i can iterate through it
         Set<String> s = sizes.getStringSet(name, null);
         Set<String> dateSet = dates.getStringSet(name, null);
+        Set<String> red = redValues.getStringSet(name, null);
         //Toast.makeText(getApplicationContext(), "array size: " + sizeDateSet, Toast.LENGTH_LONG).show();
 
         //layout in which I want to add button

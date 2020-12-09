@@ -26,13 +26,14 @@ public class ResultInfo extends AppCompatActivity {
 
     private BottomNavigationView navView;
     private TextView tv_date;
-    private TextView tv_size;
+    private TextView tv_size, tv_redValue;
     private ImageView iv_Image;
     public int id;
     public String name;
     public String path;
     public String date;
     public String size;
+    public String red;
     public static final String NAME_EXTRA = "com.example.bme3890projectapp.EXTRA.NAME";
 
     @Override
@@ -46,6 +47,7 @@ public class ResultInfo extends AppCompatActivity {
         tv_date = (TextView) findViewById(R.id.tv_date);
         tv_size = (TextView) findViewById(R.id.tv_size);
         iv_Image = (ImageView) findViewById(R.id.iv_Image);
+        tv_redValue = (TextView) findViewById(R.id.tv_redValue);
 
         Intent i = getIntent();
         id = i.getIntExtra(MyResults.ID_EXTRA, -1);
@@ -56,6 +58,7 @@ public class ResultInfo extends AppCompatActivity {
         SharedPreferences sizes = getSharedPreferences("sizes", Context.MODE_PRIVATE);
         SharedPreferences dates = getSharedPreferences("dates", Context.MODE_PRIVATE);
         SharedPreferences imagePath = getSharedPreferences("imagepath", Context.MODE_PRIVATE);
+        SharedPreferences redValues = getSharedPreferences("redValues", Context.MODE_PRIVATE);
 
         // access date and change to array
         Set<String> dateSet = dates.getStringSet(name, null);
@@ -72,10 +75,17 @@ public class ResultInfo extends AppCompatActivity {
         String[] pathArray = new String[pathSet.size()];
         pathSet.toArray(pathArray);
 
+        //access red values and change to array
+        Set<String> redSet = redValues.getStringSet(name,null);
+        String[] redArray = new String[redSet.size()];
+        redSet.toArray(redArray);
+
         tv_size.setText("Artifact Size: " + sizeArray[id] + " mm");
         size = sizeArray[id];
         date = dateArray[id];
         tv_date.setText(dateArray[id]);
+        tv_redValue.setText("Average Red Value: " + redArray[id]);
+        red = redArray[id];
 
         path = pathArray[id];
         Bitmap imageBitmap = BitmapFactory.decodeFile(path);
@@ -91,7 +101,7 @@ public class ResultInfo extends AppCompatActivity {
         emailIntent.setType("vnd.android.cursor.dir/email");
         // the attachment
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Latest Artifact Size");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "My artifact size from " + date + " is: " + size + " mm.");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "My artifact size from " + date + " is: " + size + " mm. It's average red value is: " + red);
         startActivity(Intent.createChooser(emailIntent, "Send email..."));
 
     }

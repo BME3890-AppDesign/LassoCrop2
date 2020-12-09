@@ -54,6 +54,7 @@ public class ImageCalculations extends AppCompatActivity implements View.OnTouch
     public String currentPhotoPath;
     public String date;
     private TextView tv_artifactSize;
+    public int averageRed;
     public static final String NAME_EXTRA = "com.example.bme3890projectapp.EXTRA.NAME";
 
 
@@ -108,6 +109,9 @@ public class ImageCalculations extends AppCompatActivity implements View.OnTouch
         SharedPreferences dates = getSharedPreferences("dates", Context.MODE_PRIVATE);
         SharedPreferences.Editor datesEditor = dates.edit();
 
+        SharedPreferences redValues = getSharedPreferences("redValues", Context.MODE_PRIVATE);
+        SharedPreferences.Editor redEditor = dates.edit();
+
         if (imagePath.getStringSet(name, null ) == null) {
             String [] pathArray = {currentPhotoPath};
                     Set<String> mySet = new HashSet<String>(Arrays.asList(pathArray));
@@ -117,6 +121,11 @@ public class ImageCalculations extends AppCompatActivity implements View.OnTouch
                 Set<String> s2 = new HashSet<String>(Arrays.asList(sizeArray));
             resultEditor.putStringSet(name, s2);
             resultEditor.apply();
+
+            String [] redArray = {"" + averageRed};
+            Set<String> s4 = new HashSet<String>(Arrays.asList(redArray));
+            redEditor.putStringSet(name, s4);
+            redEditor.apply();
 
             String [] dateArray = {date};
             Set<String> s3 = new HashSet<String>(Arrays.asList(dateArray));
@@ -141,6 +150,10 @@ public class ImageCalculations extends AppCompatActivity implements View.OnTouch
             Set<String> set2 = dates.getStringSet(name, null);
             set2.add(date);
             datesEditor.putStringSet(name,set2).apply();
+
+            Set<String> s4 = redValues.getStringSet(name, null);
+            set.add("" + averageRed);
+            redEditor.putStringSet(name,s4).apply();
 
             Toast.makeText(getApplicationContext(),"Saved.", Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, SecondActivity.class);
@@ -235,27 +248,26 @@ public class ImageCalculations extends AppCompatActivity implements View.OnTouch
         Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
 
 
-      // int length = (bitmapHeight-1)*(bitmapWidth-1);
+        int bitmapHeight = croppedBitmap.getHeight();
+        int bitmapWidth = croppedBitmap.getWidth();
+        int redValue;
+        int total = 0;
+        int length = (bitmapHeight)*(bitmapWidth);
 
-        //graphing 3 random pixels
-        DataPoint[] red = new DataPoint[3];
-        int redValue = Color.red(imageBitmap.getPixel(0,0));
-        red[0] = new DataPoint(0, redValue);
-        redValue = Color.red(imageBitmap.getPixel(bitmapWidth/2,bitmapHeight/2));
-        red[1] = new DataPoint(1,redValue);
-        redValue = Color.red(imageBitmap.getPixel(bitmapWidth-1,bitmapHeight-1));
-        red[2] = new DataPoint(2,redValue);
-
-
-       /* for (int k = 0; k<= length; k++){
-            for (int i = 0; i <= bitmapHeight/6; i++) {
-                for (int j = 0; j <= bitmapWidth/6; j++) {
-                    redValue = Color.red(imageBitmap.getPixel(j,i));
-                    red[k] = new DataPoint(k, redValue);
-
-                }
+        DataPoint[] red = new DataPoint[length];
+        int k=0;
+        for (int i = 0; i < bitmapHeight ; i++) {
+            for (int j = 0; j < bitmapWidth ; j++) {
+                redValue = Color.red(croppedBitmap.getPixel(j,i));
+                red[k] = new DataPoint(k, redValue);
+                total += redValue;
+                k++;
             }
-        } */
+        }
+
+        averageRed = total/length;
+        tv_artifactSize.setText("Artifact diameter: " + artSize + " mm\nAverage Red Value: "+averageRed);
+
 
         LineGraphSeries<DataPoint> redSeries = new LineGraphSeries<>(red);
 
